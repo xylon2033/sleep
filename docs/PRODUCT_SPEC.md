@@ -135,4 +135,4 @@ Everything stays on-device by default, with optional iCloud/export. There's no a
 | **B. PWA (installable web app)** | Can be built and tested end to end here; works on iPhone home screen; zero install friction | iOS web push needs a server for scheduled reminders; no HealthKit; less alarm-like |
 | **C. PWA + Apple Shortcuts / Reminders for nudges** | Gets reliable phone nudges without a server or Mac | Nudges live outside the app and are set up once by hand |
 
-**Recommendation:** start with **C** to get the program running *this week*. The treatment works with a diary and a schedule, so it doesn't need to wait on platform work. Port to **A** later if it sticks.
+**Decision (2026-10-05): C.** It's built in `app/` as a no-build PWA hosted on GitHub Pages. The wake anchor uses a Clock alarm; the other nudges are Shortcuts "Time of Day → Show Notification" automations, with times computed on the in-app Reminders screen, which flags them when the window changes. Port to **A** later if it sticks.
