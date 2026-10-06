@@ -1,8 +1,10 @@
 import Foundation
 
 /// Built-in evening (pre-sleep) tags. Custom tags use `TagEntry.customKey(_:)`.
-public enum BuiltInTag: String, CaseIterable, Codable, Sendable {
+public enum BuiltInTag: String, CaseIterable, Codable, Sendable, Identifiable {
     case caffeine, alcohol, exercise, lateScreens, stress, lateMeal, nap, lateShift, sick, travel
+
+    public var id: String { rawValue }
 
     public enum Input: Sendable { case toggle, timed, count, scale }
 

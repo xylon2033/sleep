@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The microphone listens overnight to estimate movement and detect snoring. Audio is analysed on your phone and not stored.</string>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Your wake alarm rings through Silent mode and Focus.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Reads your sleep history to show it alongside tracked nights.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Saves time in bed and estimated sleep to Apple Health.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+</dict>
+</plist>

@@ -198,7 +198,8 @@ public enum Regularity {
         return streak
     }
 
-    static func clockMinutes(fromMidnight m: Double, pivotHour: Int) -> Double {
+    /// Minutes after midnight → minutes after the pivot hour.
+    public static func clockMinutes(fromMidnight m: Double, pivotHour: Int) -> Double {
         var v = m - Double(pivotHour * 60)
         if v < 0 { v += 1440 }
         return v

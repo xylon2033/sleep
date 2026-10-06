@@ -18,7 +18,7 @@ import SwiftUI
 @Observable
 final class AlarmService {
     static let shared = AlarmService()
-    static let soundFile = "gentle-alarm.caf"
+    static let soundFile = "gentle-alarm.wav"
     static let snoozeSeconds: TimeInterval = 9 * 60
 
     private let manager = AlarmManager.shared

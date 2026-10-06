@@ -15,3 +15,24 @@ jobs:
       - name: swift test
         working-directory: Packages/SleepCore
         run: swift test
+
+  ios-build:
+    name: iOS app build (Xcode 26, simulator)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - name: Xcode version
+        run: xcodebuild -version
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild -project Sleep.xcodeproj -scheme Sleep \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | grep -E "error:|warning: .*(deprecated|unavailable)|BUILD (SUCCEEDED|FAILED)|\*\*" || true
+          xcodebuild -project Sleep.xcodeproj -scheme Sleep \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build -quiet

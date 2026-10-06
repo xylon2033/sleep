@@ -1,0 +1,5 @@
+// Edit these two lines before building on your iPhone.
+// BUNDLE_ID_PREFIX must be unique to you (e.g. com.yourname); DEVELOPMENT_TEAM is your Apple team ID
+// (Xcode → Settings → Accounts), or leave it empty and pick a team in Signing & Capabilities.
+BUNDLE_ID_PREFIX = com.example
+DEVELOPMENT_TEAM =

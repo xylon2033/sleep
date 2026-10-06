@@ -13,7 +13,7 @@ final class GentleAlarmPlayer {
     var isPlaying: Bool { player?.isPlaying ?? false }
 
     func start() {
-        guard let url = Bundle.main.url(forResource: Self.soundName, withExtension: "caf") else { return }
+        guard let url = Bundle.main.url(forResource: Self.soundName, withExtension: "wav") else { return }
         do {
             let p = try AVAudioPlayer(contentsOf: url)
             p.numberOfLoops = -1
