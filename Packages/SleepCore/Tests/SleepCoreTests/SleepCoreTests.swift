@@ -325,7 +325,7 @@ final class StatsTests: XCTestCase {
 
     func testHedgesGSign() {
         XCTAssertLessThan(Stats.hedgesG([1, 2, 1, 2], [4, 5, 4, 5])!, 0)
-        XCTAssertEqual(Stats.pnd([6, 7, 8], [1, 2, 6.5]), 2.0 / 3.0, accuracy: 1e-9)
+        XCTAssertEqual(Stats.pnd([6, 7, 8], [1, 2, 6.5])!, 2.0 / 3.0, accuracy: 1e-9)
     }
 
     func testBootstrapDeterministic() {
@@ -410,5 +410,40 @@ final class ExperimentTests: XCTestCase {
         XCTAssertEqual(r.interventionNights, 7)
         XCTAssertEqual(r.difference, 1, accuracy: 0.05)
         XCTAssertGreaterThan(r.interval!.low, 0)
+    }
+}
+
+final class EventAggregatorTests: XCTestCase {
+    func testMergesSnoresIntoEpisodes() {
+        var agg = EventAggregator()
+        let t0 = date(2026, 1, 1, 3)
+        var closed: [SoundEvent] = []
+        for i in 0..<20 { closed += agg.add(kind: .snoring, confidence: 0.8, at: t0.addingTimeInterval(Double(i) * 4)) }
+        XCTAssertTrue(closed.isEmpty)
+        // 2 minutes later: a new episode, the first one closes.
+        closed += agg.add(kind: .snoring, confidence: 0.9, at: t0.addingTimeInterval(200))
+        XCTAssertEqual(closed.count, 1)
+        XCTAssertEqual(closed[0].duration, 76 + 1.5, accuracy: 0.01)
+        closed += agg.add(kind: .cough, confidence: 0.6, at: t0.addingTimeInterval(201))
+        let rest = agg.flush()
+        XCTAssertEqual(rest.map(\.kind), [.snoring, .cough])
+        XCTAssertEqual(rest[0].confidence, 0.9)
+    }
+
+    func testCloseBefore() {
+        var agg = EventAggregator()
+        let t0 = date(2026, 1, 1, 3)
+        _ = agg.add(kind: .speech, confidence: 0.7, at: t0)
+        XCTAssertTrue(agg.close(before: t0.addingTimeInterval(5)).isEmpty)
+        XCTAssertEqual(agg.close(before: t0.addingTimeInterval(11)).count, 1)
+        XCTAssertTrue(agg.openKinds.isEmpty)
+    }
+}
+
+final class NightKeyTests: XCTestCase {
+    func testAfterMidnightBelongsToPreviousEvening() {
+        XCTAssertEqual(NightKey.key(for: date(2026, 1, 2, 1, 30), calendar: utc), "2026-01-01")
+        XCTAssertEqual(NightKey.key(for: date(2026, 1, 1, 22), calendar: utc), "2026-01-01")
+        XCTAssertEqual(NightKey.date(from: "2026-01-01", calendar: utc), date(2026, 1, 1, 12))
     }
 }
