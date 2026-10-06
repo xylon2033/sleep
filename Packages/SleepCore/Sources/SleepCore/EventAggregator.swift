@@ -45,6 +45,11 @@ public struct EventAggregator: Sendable {
         return all
     }
 
+    /// Attaches a saved audio clip to the open episode of `kind`.
+    public mutating func attachClip(_ fileName: String, to kind: SoundEvent.Kind) {
+        open[kind]?.clipFileName = fileName
+    }
+
     /// Kinds with an episode in progress (for clip capture decisions).
     public var openKinds: Set<SoundEvent.Kind> { Set(open.keys) }
 }

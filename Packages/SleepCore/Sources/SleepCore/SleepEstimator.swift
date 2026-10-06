@@ -61,6 +61,9 @@ public struct SleepEstimatorConfig: Sendable, Equatable {
     public var minWakeThreshold: Double = 2.0
     /// Wake threshold as a multiple of the night's median smoothed activity.
     public var relativeWakeThreshold: Double = 2.5
+    /// Activity at or above this is always wake, even on a night that was restless throughout
+    /// (otherwise the relative threshold would drift up and call a sleepless night "sleep").
+    public var maxWakeThreshold: Double = 4.0
     /// Length of the quiet run that marks sleep onset (epochs). 30 × 30 s = 15 min.
     public var onsetRunEpochs: Int = 30
     /// A sleep run must be at least this long to count as the last sleep before final wake.
@@ -129,7 +132,7 @@ public struct SleepEstimator: Sendable {
     func wakeThreshold(for smoothed: [Double?]) -> Double {
         let values = smoothed.compactMap { $0 }
         guard let med = Stats.median(values) else { return config.minWakeThreshold }
-        return max(config.minWakeThreshold, med * config.relativeWakeThreshold)
+        return min(config.maxWakeThreshold, max(config.minWakeThreshold, med * config.relativeWakeThreshold))
     }
 
     public func classify(grid: [EpochFeatures?]) -> [EstimatedState] {
